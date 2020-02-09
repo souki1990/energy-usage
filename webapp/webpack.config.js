@@ -19,7 +19,7 @@ module.exports = {
                 use: 'ts-loader'
             },
             {
-                test: /\.scss$/,
+                test: /\.css$/,
                 use: [
                     {
                         loader: 'style-loader'
@@ -44,7 +44,7 @@ module.exports = {
         modules: [
             path.join(__dirname, 'node_modules')
         ],
-        extensions: ['.js', '.jsx', '.ts', '.tsx']
+        extensions: ['.js', '.jsx', '.ts', '.tsx', 'css']
     }
 };
 
