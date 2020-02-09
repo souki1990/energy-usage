@@ -15,8 +15,10 @@ const App = () => {
 
   async function loadData() {
     const data = await api.getEnergyUsage();
-    setMeterReadings(data.meterReading);
-    setEnergyUsageData(data.energyUsageData);
+    if (data) {
+      setMeterReadings(data.meterReading);
+      setEnergyUsageData(data.energyUsageData);
+    }
   }
 
   return (

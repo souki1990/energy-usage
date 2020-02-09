@@ -25,12 +25,16 @@ const transformData = (meterReadings: MeterReading[]): EnergyUsage[] => {
     const energyUsage =
       meterReadings[i + 1].cumulative - meterReadings[i].cumulative;
     energyUsageData.push({
-      date: new Intl.DateTimeFormat('en-US', {
-        year: '2-digit',
-        month: '2-digit'
-      }).format(new Date(meterReadings[i + 1].readingDate)),
+      date: getDate(meterReadings[i + 1].readingDate),
       energyUsage
     });
   }
+  debugger;
   return energyUsageData;
+};
+const getDate = (date): string => {
+  return new Intl.DateTimeFormat('en-US', {
+    year: '2-digit',
+    month: '2-digit'
+  }).format(new Date(date));
 };

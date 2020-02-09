@@ -7,5 +7,6 @@
     "resolveJsonModule": true,
     "moduleResolution": "node",
     "sourceMap": true
-  }
+  },
+  "exclude": ["node_modules", "**/*.test.tsx"]
 }
