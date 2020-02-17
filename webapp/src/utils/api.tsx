@@ -33,11 +33,11 @@ export const calculateEnergyUsage = (
   meterReadings: MeterReading[]
 ): EnergyUsage[] => {
   const energyUsageData: EnergyUsage[] = [];
-  for (let i = 0; i < meterReadings.length - 2; i++) {
+  for (let i = 1; i < meterReadings.length - 1; i++) {
     const energyUsage =
-      meterReadings[i + 1].cumulative - meterReadings[i].cumulative;
+      meterReadings[i].cumulative - meterReadings[i - 1].cumulative;
     energyUsageData.push({
-      date: getDate(meterReadings[i + 1].readingDate),
+      date: getDate(meterReadings[i].readingDate),
       energyUsage
     });
   }
@@ -64,7 +64,7 @@ export const calculateMonthlyUsage = (meterReading1, meterReading2) => {
 };
 
 /**
- * Calculate meter readings
+ * Calculate Meter Readings
  * @param electricityData
  */
 export const calculateMeterReadings = electricityData => {
@@ -120,7 +120,6 @@ const checkValidData = (meterReading: MeterReading) => {
   }
 
   if (!meterReading.cumulative.toString().match(cumulativeRegex)) {
-    debugger;
     throw new Error(`${meterReading.cumulative} Cumulative is not a 5 digit`);
   }
 };
