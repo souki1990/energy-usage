@@ -1,4 +1,4 @@
-import * as api from './api';
+import * as meterReadingUtils from './meterReadingUtils';
 
 const meterReadings = [
   {
@@ -33,16 +33,21 @@ const output = [
 
 describe('Api test', () => {
   it('Test calculation of meter readings', () => {
-    expect(api.calculateMeterReadings(meterReadings)).toStrictEqual(output);
+    expect(
+      meterReadingUtils.calculateMeterReadings(meterReadings)
+    ).toStrictEqual(output);
   });
 
   it('Test calculation of Monthly Energy Usage', () => {
-    expect(api.calculateMonthlyUsage(output[0], output[1])).toEqual(17611);
+    expect(
+      meterReadingUtils.calculateMonthlyUsage(output[0], output[1])
+    ).toEqual(17611);
   });
 
   it('Test calculation of energy usage', () => {
-    expect(api.calculateEnergyUsage(meterReadings)).toEqual([
-      { date: '04/17', energyUsage: 179 }
+    expect(meterReadingUtils.calculateEnergyUsage(meterReadings)).toEqual([
+      { date: '04/17', energyUsage: 179 },
+      { date: '05/17', energyUsage: 243 }
     ]);
   });
 });
