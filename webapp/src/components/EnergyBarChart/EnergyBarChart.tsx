@@ -22,7 +22,12 @@ const EnergyBarChart = (props: {
         <YAxis dataKey="energyUsage" />
         <CartesianGrid horizontal={false} />
         <Tooltip />
-        <Bar dataKey="energyUsage" fill="#03ad54" isAnimationActive={false} />
+        <Bar
+          dataKey="energyUsage"
+          fill="#03ad54"
+          radius={[10, 10, 0, 0]}
+          isAnimationActive={false}
+        />
       </BarChart>
     </div>
   );

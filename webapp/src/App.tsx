@@ -4,7 +4,15 @@ import EnergyBarChart from './components/EnergyBarChart/EnergyBarChart';
 import MeterReadings from './components/MeterReadings/MeterReadings';
 import { MeterReading, EnergyUsage } from './types';
 import * as api from './utils/api';
+import { createGlobalStyle } from 'styled-components';
 
+const GlobalStyle = createGlobalStyle`
+  body {
+    font-family:graphik, -apple-system, helvetica, futura, sans-serif;
+    color: #003366;
+    background-color: rgb(242, 242, 242);
+  }
+`;
 const App = () => {
   const [meterReadings, setMeterReadings] = useState<MeterReading[]>();
   const [energyUsageData, setEnergyUsageData] = useState<EnergyUsage[]>();
@@ -23,14 +31,19 @@ const App = () => {
       SetError(data.error);
     }
   }
-
-  return (
-    <div>
-      {energyUsageData && <EnergyBarChart energyUsageData={energyUsageData} />}
-      {meterReadings && <MeterReadings meterReadings={meterReadings} />}
-      {error && <div> {error.message}</div>}
-    </div>
-  );
+  return React.useMemo(() => {
+    return (
+      <>
+        <GlobalStyle />
+        <div>
+          {energyUsageData && (
+            <EnergyBarChart energyUsageData={energyUsageData} />
+          )}
+          {meterReadings && <MeterReadings meterReadings={meterReadings} />}
+          {error && <div> {error.message}</div>}
+        </div>
+      </>
+    );
+  }, [energyUsageData, meterReadings, error]);
 };
-
 export default App;
