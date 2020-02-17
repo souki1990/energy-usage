@@ -1,48 +1,49 @@
 import * as React from 'react';
-import { BarChart, Bar, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
-import * as meterReadingsData from './data/meterReadingsSample.json';
+import { useEffect, useState } from 'react';
+import EnergyBarChart from './components/EnergyBarChart/EnergyBarChart';
+import MeterReadings from './components/MeterReadings/MeterReadings';
+import { MeterReading, EnergyUsage } from './types';
+import * as api from './utils/api';
+import { createGlobalStyle } from 'styled-components';
 
-export default () => {
-  const meterReadings = meterReadingsData.electricity;
-  const meterReadingsRows = meterReadings.map(reading => (
-    <tr key={reading.readingDate}>
-      <td>{reading.readingDate}</td>
-      <td>{reading.cumulative}</td>
-      <td>{reading.unit}</td>
-    </tr>
-  ));
-
-  const energyUsageData = [];
-  for (let i = 0; i < meterReadings.length - 2; i++) {
-    const energyUsage =
-      meterReadings[i + 1].cumulative - meterReadings[i].cumulative;
-    energyUsageData.push({
-      date: meterReadings[i + 1].readingDate,
-      energyUsage
-    });
+const GlobalStyle = createGlobalStyle`
+  body {
+    font-family:graphik, -apple-system, helvetica, futura, sans-serif;
+    color: #003366;
+    background-color: rgb(242, 242, 242);
   }
+`;
+const App = () => {
+  const [meterReadings, setMeterReadings] = useState<MeterReading[]>();
+  const [energyUsageData, setEnergyUsageData] = useState<EnergyUsage[]>();
+  const [error, SetError] = useState<any>();
 
-  return (
-    <div>
-      <h2>Energy Usage</h2>
-      <BarChart width={1400} height={400} data={energyUsageData}>
-        <XAxis dataKey="date" />
-        <YAxis dataKey="energyUsage" />
-        <CartesianGrid horizontal={false} />
-        <Tooltip />
-        <Bar dataKey="energyUsage" fill="#03ad54" isAnimationActive={false} />
-      </BarChart>
-      <h2>Meter Readings</h2>
-      <table>
-        <tbody>
-          <tr>
-            <th>Date</th>
-            <th>Reading</th>
-            <th>Unit</th>
-          </tr>
-          {meterReadingsRows}
-        </tbody>
-      </table>
-    </div>
-  );
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  async function loadData() {
+    const data = await api.getEnergyUsage();
+    if (!data.error) {
+      setMeterReadings(data.meterReadings);
+      setEnergyUsageData(data.energyUsageData);
+    } else {
+      SetError(data.error);
+    }
+  }
+  return React.useMemo(() => {
+    return (
+      <>
+        <GlobalStyle />
+        <div>
+          {energyUsageData && (
+            <EnergyBarChart energyUsageData={energyUsageData} />
+          )}
+          {meterReadings && <MeterReadings meterReadings={meterReadings} />}
+          {error && <div> {error.message}</div>}
+        </div>
+      </>
+    );
+  }, [energyUsageData, meterReadings, error]);
 };
+export default App;
