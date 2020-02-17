@@ -8,6 +8,7 @@ import * as api from './utils/api';
 const App = () => {
   const [meterReadings, setMeterReadings] = useState<MeterReading[]>();
   const [energyUsageData, setEnergyUsageData] = useState<EnergyUsage[]>();
+  const [error, SetError] = useState<any>();
 
   useEffect(() => {
     loadData();
@@ -15,9 +16,11 @@ const App = () => {
 
   async function loadData() {
     const data = await api.getEnergyUsage();
-    if (data) {
-      setMeterReadings(data.meterReading);
+    if (!data.error) {
+      setMeterReadings(data.meterReadings);
       setEnergyUsageData(data.energyUsageData);
+    } else {
+      SetError(data.error);
     }
   }
 
@@ -25,6 +28,7 @@ const App = () => {
     <div>
       {energyUsageData && <EnergyBarChart energyUsageData={energyUsageData} />}
       {meterReadings && <MeterReadings meterReadings={meterReadings} />}
+      {error && <div> {error.message}</div>}
     </div>
   );
 };

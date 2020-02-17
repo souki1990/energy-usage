@@ -1,7 +1,5 @@
 import { render, waitForElement } from '@testing-library/react';
-import { act } from 'react-dom/test-utils';
 import App from './App';
-import {} from 'jest';
 import React = require('react');
 import * as api from './utils/api';
 
@@ -9,7 +7,7 @@ describe('App', () => {
   it('handles async useEffect', async () => {
     spyOn(api, 'getEnergyUsage').and.returnValue(
       Promise.resolve({
-        meterReading: [
+        meterReadings: [
           {
             cumulative: 17580,
             readingDate: '2017-03-28T00:00:00.000Z',
@@ -39,7 +37,7 @@ describe('App', () => {
     const elements = await waitForElement(() =>
       container.getElementsByTagName('tr')
     );
+    console.log(elements);
     expect(elements.length).toBe(4);
-    // expect(container.getElementsByTagName('tr').length).toBe(4);
   });
 });
